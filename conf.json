@@ -1,0 +1,28 @@
+{
+  "applications": {
+    "app": {
+      "executable": "out",
+      "type": "external"
+    }
+  },
+  "listeners": {
+    "*:8080": {
+      "pass": "routes"
+    }
+  },
+  "routes": [
+    {
+      "match": {
+        "uri": "/api/docs/*"
+      },
+      "action": {
+        "share": "static$uri"
+      }
+    },
+    {
+      "action": {
+        "pass": "applications/app"
+      }
+    }
+  ]
+}

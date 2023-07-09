@@ -14,5 +14,4 @@ object Main extends epollcat.EpollApp.Simple:
     SNUnitServerBuilder
       .default[IO]
       .withServerEndpoints(endpointsWithLogic)
-      .build
-      .useForever
+      .run

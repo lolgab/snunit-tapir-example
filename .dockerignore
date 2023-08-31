@@ -1,0 +1,5 @@
+/out
+/.dockerignore
+/Dockerfile
+/README.md
+/.bsp

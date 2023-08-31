@@ -52,15 +52,18 @@ object openapi extends Common.JVM {
 
 def unitConf = T.source { T.workspace / "conf.json" }
 def staticDir = T.source { T.workspace / "static" }
-def runUnit() = T.command {
-  val wd = T.workspace
+
+def buildApp = T {
   val statedir = T.dest / "statedir"
   os.makeDir.all(statedir)
   os.copy.into(unitConf().path, statedir)
   os.copy.into(snunit.nativeLink(), T.dest)
   os.copy.into(staticDir().path, T.dest)
   os.copy.into(openapi.buildYaml().path, T.dest / "static" / "api" / "docs")
+  T.dest
+}
 
+def runUnit() = T.command {
   Jvm.runSubprocess(
     commandArgs = Seq(
       "unitd",
@@ -73,6 +76,6 @@ def runUnit() = T.command {
       "127.0.0.1:9000"
     ),
     envArgs = Map(),
-    workingDir = T.dest
+    workingDir = buildApp()
   )
 }

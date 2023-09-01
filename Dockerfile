@@ -2,7 +2,7 @@ FROM ubuntu:22.04 as dev
 
 WORKDIR /workdir
 
-ENV UNIT_VERSION=1.30.0
+ENV UNIT_VERSION=1.31.0
 
 # Install Scala Native requirements
 RUN apt-get update && apt-get install -y openjdk-11-jdk clang

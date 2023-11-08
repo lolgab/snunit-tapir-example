@@ -2,7 +2,15 @@
   "applications": {
     "app": {
       "executable": "out",
-      "type": "external"
+      "type": "external",
+      "environment": {
+        "SQLITE_FILE": "db/sqlite.db"
+      },
+      "processes": {
+        "spare": 1,
+        "max": 10,
+        "idle_timeout": 1
+      }
     }
   },
   "listeners": {
@@ -13,7 +21,11 @@
   "routes": [
     {
       "match": {
-        "uri": "/api/docs/*"
+        "uri": [
+          "/api/docs/*",
+          "/*.js",
+          "/*.css"
+        ]
       },
       "action": {
         "share": "static$uri"

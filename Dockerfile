@@ -28,7 +28,7 @@ COPY . .
 # tapir dependency
 RUN apt-get install -y libidn2-dev
 
-RUN ./mill --no-server buildApp
+RUN SCALANATIVE_MODE=release-fast SCALANATIVE_LTO=thin ./mill --no-server buildApp
 
 RUN mkdir empty_dir
 RUN groupadd --gid 999 unit && \

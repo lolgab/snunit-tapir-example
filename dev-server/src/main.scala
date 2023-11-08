@@ -4,7 +4,7 @@ import java.io.File
 def main(command: String) =
   import sys.process.*
 
-  val bgProc = Process(command, cwd = new File("out/buildApp.dest")).run()
+  val bgProc = Process(command, cwd = new File("out/localApp.dest")).run()
 
   sys.addShutdownHook {
     println("Caught shutdown, killing process")

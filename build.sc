@@ -111,10 +111,14 @@ def staticDir = T.source { T.workspace / "static" }
 /** Persistent directory for the dev sqlite database file */
 def dbDir = T.persistent { T.dest }
 
-def buildApp = T {
+def appDir(linkDbDir: Boolean) = T.task {
   val statedir = T.dest / "statedir"
   os.makeDir.all(statedir)
-  os.symlink(T.dest / "db", dbDir())
+  if (linkDbDir) {
+    os.symlink(T.dest / "db", dbDir())
+  } else {
+    os.makeDir(T.dest / "db")
+  }
   os.copy.into(unitConf().path, statedir)
   os.copy.into(snunit.nativeLink(), T.dest)
   os.copy.into(staticDir().path, T.dest)
@@ -122,10 +126,13 @@ def buildApp = T {
   T.dest
 }
 
+def localApp = T { appDir(linkDbDir = true) }
+def dockerApp = T { appDir(linkDbDir = false) }
+
 object `dev-server` extends Common.JVM
 
 def runUnit() = T.command {
-  buildApp()
+  localApp()
 
   `dev-server`.runBackground(
     "unitd --statedir statedir --log /dev/stdout --no-daemon --control 127.0.0.1:9000"

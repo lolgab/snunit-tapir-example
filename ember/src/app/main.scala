@@ -14,7 +14,7 @@ object main extends ResourceApp.Forever:
       .withHttpApp(
         Router(
           "/" -> Http4sServerInterpreter[IO]().toRoutes(endpoints),
-          "/" -> fileService(FileService.Config("./out/buildApp.dest/static"))
+          "/" -> fileService(FileService.Config("./out/localApp.dest/static"))
         ).orNotFound
       )
       .build

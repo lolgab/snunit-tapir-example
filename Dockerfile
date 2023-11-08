@@ -19,16 +19,17 @@ RUN cd unit && \
     install -p build/lib/libunit.a /usr/local/lib/libunit.a
 
 COPY mill mill
+COPY .mill-version .mill-version
 
 # pre-download Mill
-RUN ./mill --no-server --help
+RUN ./mill --no-server version
 
 COPY . .
 
 # tapir dependency
 RUN apt-get install -y libidn2-dev
 
-RUN SCALANATIVE_MODE=release-fast SCALANATIVE_LTO=thin ./mill --no-server buildApp
+RUN ./mill --no-server dockerApp
 
 RUN mkdir empty_dir
 RUN groupadd --gid 999 unit && \
@@ -40,7 +41,7 @@ FROM scratch
 
 WORKDIR /workdir
 
-COPY --from=dev /workdir/out/buildApp.dest/ /workdir/
+COPY --from=dev /workdir/out/dockerApp.dest/ /workdir/
 
 # unitd dependencies
 COPY --from=dev /workdir/unit/build/sbin/unitd /usr/sbin/unitd

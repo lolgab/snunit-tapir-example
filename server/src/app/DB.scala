@@ -30,7 +30,7 @@ object DB:
       sqlite <- Database.open[IO](sqliteString)
       _ <- Resource.eval(
         sqlite.execute(
-          sql"CREATE TABLE IF NOT EXISTS tweet (id INTEGER PRIMARY KEY ASC, author, text)".command
+          sql"CREATE TABLE IF NOT EXISTS tweet (id INTEGER PRIMARY KEY ASC, author, text);".command
         )
       )
     yield new DB:

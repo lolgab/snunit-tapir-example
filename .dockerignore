@@ -8,3 +8,8 @@
 /.vscode
 /.metals
 /.bsp
+/.DS_Store
+/.gitignore
+/.scalafmt.conf
+/screenshot.png
+

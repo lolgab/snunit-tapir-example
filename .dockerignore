@@ -3,3 +3,8 @@
 /Dockerfile
 /README.md
 /.bsp
+/fly.toml
+/.git
+/.vscode
+/.metals
+/.bsp

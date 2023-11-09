@@ -116,8 +116,6 @@ def appDir(linkDbDir: Boolean) = T.task {
   os.makeDir.all(statedir)
   if (linkDbDir) {
     os.symlink(T.dest / "db", dbDir())
-  } else {
-    os.makeDir(T.dest / "db")
   }
   os.copy.into(unitConf().path, statedir)
   os.copy.into(snunit.nativeLink(), T.dest)

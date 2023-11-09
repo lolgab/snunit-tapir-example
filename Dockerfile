@@ -7,6 +7,9 @@ ENV UNIT_VERSION=1.31.0
 # Install Scala Native requirements
 RUN apt-get update && apt-get install -y openjdk-11-jdk clang
 
+# Install tapir requirements
+RUN apt-get update && apt-get install -y libidn2-dev
+
 # Compile minimal NGINX Unit
 RUN apt-get update && apt-get install -y curl build-essential
 RUN curl -O https://unit.nginx.org/download/unit-$UNIT_VERSION.tar.gz && tar xzf unit-$UNIT_VERSION.tar.gz
@@ -25,9 +28,6 @@ COPY .mill-version .mill-version
 RUN ./mill --no-server version
 
 COPY . .
-
-# tapir dependency
-RUN apt-get install -y libidn2-dev
 
 RUN ./mill --no-server dockerApp
 
@@ -49,6 +49,12 @@ COPY --from=dev /workdir/passwd /etc/passwd
 COPY --from=dev /workdir/group /etc/group
 COPY --from=dev /workdir/empty_dir /usr/local/var/run
 
+# needed for fly.io hack to change owner of volume
+COPY --from=dev /usr/bin/bash /usr/bin/bash
+COPY --from=dev /bin/chown /bin/chown
+COPY --from=dev */lib/aarch64-linux-gnu/libtinfo.so.6 /lib/aarch64-linux-gnu/libtinfo.so.6
+COPY --from=dev */lib/x86_64-linux-gnu/libtinfo.so.6 /lib/x86_64-linux-gnu/libtinfo.so.6
+
 # scala native and unitd dependencies
 
 ## x86_64 specific files
@@ -69,4 +75,7 @@ COPY --from=dev */lib/aarch64-linux-gnu/libunistring.so.2 /lib/aarch64-linux-gnu
 COPY --from=dev */lib/aarch64-linux-gnu/libidn2.so.0 /lib/aarch64-linux-gnu/libidn2.so.0
 COPY --from=dev */lib/ld-linux-aarch64.so.1 /lib/ld-linux-aarch64.so.1
 
-ENTRYPOINT [ "unitd", "--no-daemon" ]
+# ENTRYPOINT [ "unitd", "--no-daemon" ]
+
+# hack for fly.io volume owner
+ENTRYPOINT [ "bash", "-c", "chown -R unit:unit /workdir/db && unitd --no-daemon" ]

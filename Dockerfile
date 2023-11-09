@@ -29,7 +29,7 @@ RUN ./mill --no-server version
 
 COPY . .
 
-RUN ./mill --no-server dockerApp
+RUN SCALANATIVE_MODE=release-fast SCALANATIVE_LTO=thin ./mill --no-server dockerApp
 
 RUN mkdir empty_dir
 RUN groupadd --gid 999 unit && \

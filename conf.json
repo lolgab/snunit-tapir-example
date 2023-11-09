@@ -8,8 +8,8 @@
       },
       "processes": {
         "spare": 1,
-        "max": 10,
-        "idle_timeout": 1
+        "max": 2,
+        "idle_timeout": 10
       }
     }
   },
